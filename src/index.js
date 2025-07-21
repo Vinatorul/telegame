@@ -9,20 +9,45 @@ const initTelegramGameAPI = () => {
     
     // Initialize the WebApp
     tg.expand();
+    tg.enableClosingConfirmation();
     
-    // Handle game events
+    // Set up theme colors
+    document.documentElement.style.setProperty('--tg-color-scheme', tg.colorScheme);
+    document.documentElement.style.setProperty('--tg-bg-color', tg.backgroundColor);
+    
+    // Handle theme changes
+    tg.onEvent('themeChanged', () => {
+      document.documentElement.style.setProperty('--tg-color-scheme', tg.colorScheme);
+      document.documentElement.style.setProperty('--tg-bg-color', tg.backgroundColor);
+    });
+    
+    // Handle viewport changes
     tg.onEvent('viewportChanged', () => {
-      // Resize game if needed
       if (game) {
         game.scale.refresh();
       }
     });
     
-    return tg;
+    // Prepare init data for backend validation
+    const initData = tg.initData || '';
+    const initDataUnsafe = tg.initDataUnsafe || {};
+    
+    return {
+      ...tg,
+      initData,
+      initDataUnsafe,
+      userId: initDataUnsafe.user?.id,
+      chatId: initDataUnsafe.chat?.id
+    };
   }
   
   console.log('Not running in Telegram WebApp, using browser mode');
-  return null;
+  return {
+    initData: '',
+    initDataUnsafe: {},
+    userId: null,
+    chatId: null
+  };
 };
 
 // Game configuration
