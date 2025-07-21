@@ -52,6 +52,29 @@ npm run build
 
 The built files will be in the `dist` directory.
 
+## Deployment to GitHub Pages
+
+To deploy the game to GitHub Pages:
+
+1. Make sure you have committed all changes to your main branch
+2. Run the deployment script:
+   ```bash
+   npm run deploy
+   ```
+   
+This will:
+- Build the production version
+- Switch to gh-pages branch
+- Copy built files
+- Commit and push changes
+
+### Manual Deployment
+
+If you prefer to deploy manually:
+```bash
+./deploy-gh-pages.sh
+```
+
 ## Telegram Bot Setup
 
 1. Talk to [@BotFather](https://t.me/botfather) on Telegram
