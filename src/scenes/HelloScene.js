@@ -14,7 +14,7 @@ export default class HelloScene extends Phaser.Scene {
     this.add.text(
       this.cameras.main.centerX, 
       this.cameras.main.centerY, 
-      'Hello Telegram Game World!', 
+      'Hello Telegram Game!', 
       { 
         font: '64px Arial', 
         fill: '#ffffff' 
