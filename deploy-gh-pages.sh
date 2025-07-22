@@ -30,21 +30,27 @@ cp dist/index.html "$TEMP_DIR/" || {
   exit 1
 }
 
-LATEST_JS=$(ls dist/telegame.*.js | sort -V | tail -n 1)
-LATEST_MAP="${LATEST_JS}.map"
-
-if [ ! -f "$LATEST_JS" ]; then
-  echo "Error: JS file not found"
+JS_FILE=$(grep -o 'src=[^ ]*telegame\.[^ ]*\.js' dist/index.html | cut -d= -f2)
+if [ -z "$JS_FILE" ]; then
+  echo "Error: Could not find local JS file reference in index.html"
   exit 1
 fi
 
-cp "$LATEST_JS" "$TEMP_DIR/" || {
+JS_PATH="dist/$JS_FILE"
+MAP_PATH="$JS_PATH.map"
+
+if [ ! -f "$JS_PATH" ]; then
+  echo "Error: JS file $JS_PATH not found"
+  exit 1
+fi
+
+cp "$JS_PATH" "$TEMP_DIR/" || {
   echo "Failed to copy JS file"
   exit 1
 }
 
-if [ -f "$LATEST_MAP" ]; then
-  cp "$LATEST_MAP" "$TEMP_DIR/" || {
+if [ -f "$MAP_PATH" ]; then
+  cp "$MAP_PATH" "$TEMP_DIR/" || {
     echo "Failed to copy source map"
     exit 1
   }
