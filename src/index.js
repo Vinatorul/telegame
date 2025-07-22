@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
 import HelloScene from './scenes/HelloScene';
+import BootScene from './scenes/BootScene';
+import GameScene from './scenes/GameScene';
+import UIScene from './scenes/UIScene';
 
 // Telegram Game API integration
 const initTelegramGameAPI = () => {
@@ -56,7 +59,7 @@ const config = {
   width: 800,
   height: 600,
   parent: 'game',
-  scene: [HelloScene],
+  scene: [BootScene, GameScene, UIScene, HelloScene],
   physics: {
     default: 'arcade',
     arcade: {
