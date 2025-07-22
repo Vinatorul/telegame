@@ -8,7 +8,6 @@ export default class BootScene extends Phaser.Scene {
   }
 
   preload() {
-    // Display loading text
     const loadingText = this.add.text(
       this.cameras.main.centerX,
       this.cameras.main.centerY,
@@ -19,7 +18,6 @@ export default class BootScene extends Phaser.Scene {
       }
     ).setOrigin(0.5);
 
-    // Create loading bar
     const progressBar = this.add.graphics();
     const progressBox = this.add.graphics();
     progressBox.fillStyle(0x222222, 0.8);
@@ -30,7 +28,6 @@ export default class BootScene extends Phaser.Scene {
       30
     );
 
-    // Loading progress events
     this.load.on('progress', (value) => {
       progressBar.clear();
       progressBar.fillStyle(0xffffff, 1);
@@ -48,29 +45,20 @@ export default class BootScene extends Phaser.Scene {
       loadingText.destroy();
     });
 
-    // Generate placeholder assets
     this.load.on('complete', () => {
-      // Create player sprite and animations
       createPlayerSprite(this);
       createPlayerAnimations(this);
       
-      // Create platform sprites
       createPlatformSprite(this);
       createMovingPlatformSprite(this);
       
-      // Create background
       createBackgroundSprite(this, this.cameras.main.width, this.cameras.main.height);
     });
-
-    // Load any external assets here if needed
-    // this.load.image('player', 'assets/player.png');
-    // this.load.image('platform', 'assets/platform.png');
   }
 
   create() {
     console.log('BootScene: Assets loaded');
     
-    // Start the game scene
     this.scene.start('GameScene');
   }
 }
