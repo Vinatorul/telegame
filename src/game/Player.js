@@ -101,14 +101,10 @@ export default class Player {
     }
     
     // Check jump input
-    const jumpKey = Phaser.Input.Keyboard.JustDown(this.cursors.up) || 
-                    Phaser.Input.Keyboard.JustDown(this.wasd.up) || 
+    const jumpKey = Phaser.Input.Keyboard.JustDown(this.cursors.up) ||
+                    Phaser.Input.Keyboard.JustDown(this.wasd.up) ||
                     this.touchControls.jump;
     
-    // Reset touch jump to prevent continuous jumping
-    if (this.touchControls.jump) {
-      this.touchControls.jump = false;
-    }
     
     // Jump if on ground and jump key pressed
     if (onGround && jumpKey) {

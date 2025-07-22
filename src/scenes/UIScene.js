@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import TouchManager from '../game/TouchManager';
 
 export default class UIScene extends Phaser.Scene {
   constructor() {
@@ -11,6 +12,9 @@ export default class UIScene extends Phaser.Scene {
     this.leftButton = null;
     this.rightButton = null;
     this.jumpButton = null;
+    
+    // Touch manager
+    this.touchManager = null;
   }
 
   init(data) {
@@ -38,7 +42,7 @@ export default class UIScene extends Phaser.Scene {
     
     // Create left movement button (left side of screen)
     this.leftButton = this.add.circle(
-      buttonSize, 
+      buttonSize,
       height - buttonSize,
       buttonSize / 2,
       0x0000ff,
@@ -60,7 +64,7 @@ export default class UIScene extends Phaser.Scene {
     
     // Create right movement button (left-center of screen)
     this.rightButton = this.add.circle(
-      buttonSize * 3, 
+      buttonSize * 3,
       height - buttonSize,
       buttonSize / 2,
       0x0000ff,
@@ -82,7 +86,7 @@ export default class UIScene extends Phaser.Scene {
     
     // Create jump button (right side of screen)
     this.jumpButton = this.add.circle(
-      width - buttonSize, 
+      width - buttonSize,
       height - buttonSize,
       buttonSize / 2,
       0xff0000,
@@ -103,48 +107,49 @@ export default class UIScene extends Phaser.Scene {
     ).setOrigin(0.5);
     jumpIcon.setScrollFactor(0);
     
-    // Set up touch events
-    this.setupTouchEvents();
+    // Initialize touch manager
+    this.initTouchManager();
   }
 
   /**
-   * Set up touch events for the buttons
+   * Initialize the touch manager
    */
-  setupTouchEvents() {
+  initTouchManager() {
     if (!this.controls) {
       console.warn('Controls not set in UIScene');
       return;
     }
     
-    // Left button events
-    this.leftButton.on('pointerdown', () => {
-      this.controls.setLeftDown(true);
-    });
+    // Create touch manager
+    this.touchManager = new TouchManager(this, this.controls);
     
-    this.leftButton.on('pointerup', () => {
-      this.controls.setLeftDown(false);
+    // Set control zones
+    this.touchManager.setControlZones({
+      left: new Phaser.Geom.Circle(
+        this.leftButton.x,
+        this.leftButton.y,
+        this.leftButton.radius
+      ),
+      right: new Phaser.Geom.Circle(
+        this.rightButton.x,
+        this.rightButton.y,
+        this.rightButton.radius
+      ),
+      jump: new Phaser.Geom.Circle(
+        this.jumpButton.x,
+        this.jumpButton.y,
+        this.jumpButton.radius
+      )
     });
-    
-    this.leftButton.on('pointerout', () => {
-      this.controls.setLeftDown(false);
-    });
-    
-    // Right button events
-    this.rightButton.on('pointerdown', () => {
-      this.controls.setRightDown(true);
-    });
-    
-    this.rightButton.on('pointerup', () => {
-      this.controls.setRightDown(false);
-    });
-    
-    this.rightButton.on('pointerout', () => {
-      this.controls.setRightDown(false);
-    });
-    
-    // Jump button events
-    this.jumpButton.on('pointerdown', () => {
-      this.controls.setJumpDown();
-    });
+  }
+  
+  /**
+   * Update method called by the scene manager on each frame
+   */
+  update() {
+    // Update touch manager if it exists
+    if (this.touchManager) {
+      this.touchManager.update();
+    }
   }
 }

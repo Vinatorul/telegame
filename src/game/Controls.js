@@ -14,6 +14,7 @@ export default class Controls {
     this.isLeftDown = false;
     this.isRightDown = false;
     this.isJumpDown = false;
+    this.jumpJustPressed = false;
     
     // Set up keyboard controls
     this.setupKeyboard();
@@ -54,11 +55,13 @@ export default class Controls {
     this.player.setTouchControls({
       left: this.isLeftDown,
       right: this.isRightDown,
-      jump: this.isJumpDown
+      jump: this.jumpJustPressed
     });
     
     // Reset jump flag after it's been processed
-    this.isJumpDown = false;
+    // This allows jump to be a one-time action while still allowing
+    // simultaneous movement
+    this.jumpJustPressed = false;
   }
   
   /**
@@ -79,8 +82,14 @@ export default class Controls {
   
   /**
    * Handle jump button press
+   * @param {boolean} isDown - Whether the button is pressed
    */
-  setJumpDown() {
-    this.isJumpDown = true;
+  setJumpDown(isDown = true) {
+    // Only trigger jump if it wasn't already down
+    // This prevents continuous jumping while holding the button
+    if (isDown && !this.isJumpDown) {
+      this.jumpJustPressed = true;
+    }
+    this.isJumpDown = isDown;
   }
 }

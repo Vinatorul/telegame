@@ -67,6 +67,12 @@ const config = {
       debug: false
     }
   },
+  input: {
+    touch: {
+      capture: true
+    },
+    activePointers: 3  // Support up to 3 simultaneous touches
+  },
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH
